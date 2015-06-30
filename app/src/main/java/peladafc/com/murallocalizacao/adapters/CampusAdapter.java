@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import org.w3c.dom.Text;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import peladafc.com.murallocalizacao.Modelos.Campus;
@@ -22,6 +23,7 @@ public class CampusAdapter extends RecyclerView.Adapter <CampusAdapter.CampusVie
     private List<Campus> campus;
 
     public CampusAdapter(){
+        campus = new ArrayList<>();
         for (int i = 0; i < Globals.cidades.size(); i++) {
             Cidade cidade = Globals.cidades.get(i);
             for (int j = 0; j < cidade.getCampusList().size(); j++) {
@@ -40,7 +42,7 @@ public class CampusAdapter extends RecyclerView.Adapter <CampusAdapter.CampusVie
     @Override
     public void onBindViewHolder(CampusViewHolder holder, int position) {
         String nomeCampus;
-        nomeCampus = campus.get(position).getNome().equalsIgnoreCase("") ? campus.get(position).getNome() : "Campus: "+campus.get(position).getOrdem();
+        nomeCampus = campus.get(position).getNome().equalsIgnoreCase("") ? "Campus: "+campus.get(position).getOrdem() : campus.get(position).getNome();
         holder.txtNomeCampus.setText(nomeCampus);
         holder.txtNomeCidade.setText(campus.get(position).getNomeCidade());
     }

@@ -1,20 +1,52 @@
 package peladafc.com.murallocalizacao;
 
+import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+
+import peladafc.com.murallocalizacao.Modelos.Campus;
+import peladafc.com.murallocalizacao.Services.CampusTask;
+import peladafc.com.murallocalizacao.adapters.CampusAdapter;
+import peladafc.com.murallocalizacao.fragments.CampusFragment;
+import peladafc.com.murallocalizacao.globals.Globals;
 
 
 public class MainActivity extends ActionBarActivity {
-
+    CampusTask tsk;
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        if(Globals.cidades == null){
+
+            tsk = new CampusTask(new ReadyToGo() {
+                @Override
+                public void readyTo() {
+                    final CampusFragment campusFragment = new CampusFragment();
+                    campusFragment.setCidades(Globals.cidades);
+                    if (savedInstanceState == null) {
+                        getSupportFragmentManager().beginTransaction()
+                                .add(R.id.campus_fragment, campusFragment).commit();
+                    }
+                }
+            });
+            tsk.execute();
+        }
+
+
+
+
 
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

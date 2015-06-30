@@ -14,13 +14,13 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <fragment
+            <FrameLayout
                 android:id="@+id/campus_fragment"
-                android:name="peladafc.com.murallocalizacao.fragments.CampusFragment"
+
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                tools:layout="@layout/fragment_campus" />
+                 />
 
 
         </LinearLayout>

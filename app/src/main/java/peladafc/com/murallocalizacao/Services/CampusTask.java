@@ -6,6 +6,7 @@ import android.util.Log;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.json.JSONTokener;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -19,44 +20,54 @@ import java.util.Set;
 import peladafc.com.murallocalizacao.Modelos.Campus;
 import peladafc.com.murallocalizacao.Modelos.Cidade;
 import peladafc.com.murallocalizacao.Modelos.Instituto;
+import peladafc.com.murallocalizacao.ReadyToGo;
 import peladafc.com.murallocalizacao.globals.Globals;
 //
 /**
  * Created by AIRES on 29/06/2015.
  */
 public class CampusTask extends AsyncTask <Void, Void, String>{
+    private static final String urlStr = "https://cdn.fbsbx.com/hphotos-xpt1/v/t59.2708-21/11689315_10206301072113251_1447449821_n.json/institutis-1-1.json?oh=f40347e0eb42ab960de33a1930b54c3f&oe=5595BAE1&dl=1";
+    ReadyToGo ready;
 
-
+    public CampusTask(ReadyToGo ready){
+        this.ready = ready;
+    }
     @Override
     protected String doInBackground(Void... params) {
-        String retorno = null;
+        String retorno = "";
+        String json = "";
         try {
             // Create a URL for the desired page
-            URL url = new URL("https://cdn.fbsbx.com/hphotos-xpt1/v/t59.2708-21/11699301_10206291880843475_325070215_n.json/institutis-1.json?oh=6d0035aa0a00678e6f5e43e7ed5dbe96&oe=55936357&dl=1");
+            URL url = new URL(urlStr);
 
             // Read all the text returned by the server
             BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
-            retorno = in.readLine();
+            while((retorno = in.readLine()) != null){
+                json += retorno;
+            }
+
             in.close();
+
         } catch (MalformedURLException e) {
             retorno = "";
         } catch (IOException e) {
+            Log.e("Erro", e.getMessage());
         }
-        retorno = "";
-        return retorno;
+        return json;
     }
 
     @Override
     protected void onPostExecute(String jsonString) {
-        super.onPostExecute(jsonString);
         Globals.cidades = new ArrayList<Cidade>();
         try {
+
             JSONArray listasCidades = new JSONArray(jsonString);
-            Iterator<String> chaves = listasCidades.getJSONObject(0).keys();
             for (int i = 0; i< listasCidades.length(); i++){
                 Cidade cidade = new Cidade();
-                cidade.setNome(chaves.next());
+
                 JSONObject objetoCidade = listasCidades.getJSONObject(i);
+                cidade.setNome(objetoCidade.getString("Nome"));
                 JSONArray listaCampusJson = objetoCidade.getJSONArray("Campus");
                 ArrayList<Campus> listaCampus = new ArrayList<>();
                 for (int j = 0; j < listaCampusJson.length(); j++) {
@@ -66,14 +77,14 @@ public class CampusTask extends AsyncTask <Void, Void, String>{
                     campus.setSetor(campusJson.getString("Setor"));
                     campus.setNome(campusJson.getString("Nome"));
                     campus.setLatitude(campusJson.getDouble("Latitude"));
-                    campus.setLongitude(campusJson.getDouble("longitude"));
+                    campus.setLongitude(campusJson.getDouble("Longitude"));
                     campus.setNomeCidade(cidade.getNome());
                     ArrayList<Instituto> institutos = new ArrayList<>();
                     JSONArray listaInstitutosJson = campusJson.getJSONArray("Institutos");
                     for (int k = 0; k < listaInstitutosJson.length(); k++) {
                         Instituto instituto = new Instituto();
                         JSONObject institutoJson = listaInstitutosJson.getJSONObject(k);
-                        instituto.setSigla(institutoJson.getString("Sigla"));
+                        instituto.setSigla(institutoJson.getString("Siga"));
                         instituto.setNome(institutoJson.getString("Nome"));
                         instituto.setLatitude(institutoJson.getDouble("Latitude"));
                         instituto.setLongitude(institutoJson.getDouble("Longitude"));
@@ -86,6 +97,7 @@ public class CampusTask extends AsyncTask <Void, Void, String>{
                 Globals.cidades.add(cidade);
             }
 
+            ready.readyTo();
         } catch (JSONException e) {
             Log.e("PARSE JSON", "Erro no parsing do Json", e);
         }
