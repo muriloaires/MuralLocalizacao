@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/MuralLocalizacao.iml" filepath="$PROJECT_DIR$/MuralLocalizacao.iml" />
+      <module fileurl="file://$PROJECT_DIR$/MuralLocalizacao-master.iml" filepath="$PROJECT_DIR$/MuralLocalizacao-master.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>

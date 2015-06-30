@@ -4,6 +4,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 import java.util.List;
 
@@ -36,7 +39,10 @@ public class CampusAdapter extends RecyclerView.Adapter <CampusAdapter.CampusVie
 
     @Override
     public void onBindViewHolder(CampusViewHolder holder, int position) {
-
+        String nomeCampus;
+        nomeCampus = campus.get(position).getNome().equalsIgnoreCase("") ? campus.get(position).getNome() : "Campus: "+campus.get(position).getOrdem();
+        holder.txtNomeCampus.setText(nomeCampus);
+        holder.txtNomeCidade.setText(campus.get(position).getNomeCidade());
     }
 
     @Override
@@ -45,9 +51,12 @@ public class CampusAdapter extends RecyclerView.Adapter <CampusAdapter.CampusVie
     }
 
     public static class CampusViewHolder extends RecyclerView.ViewHolder {
-
+        TextView txtNomeCampus;
+        TextView txtNomeCidade;
         public CampusViewHolder(View itemView) {
             super(itemView);
+            txtNomeCampus = (TextView) itemView.findViewById(R.id.txtNomeCampus);
+            txtNomeCidade = (TextView) itemView.findViewById(R.id.txtCidadeCampus);
         }
     }
 }

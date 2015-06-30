@@ -13,6 +13,15 @@ public class Campus {
     private double latitude;
     private double longitude;
     private List<Instituto> institutos;
+    private String nomeCidade;
+
+    public String getNomeCidade() {
+        return nomeCidade;
+    }
+
+    public void setNomeCidade(String nomeCidade) {
+        this.nomeCidade = nomeCidade;
+    }
 
     public int getOrdem() {
         return ordem;

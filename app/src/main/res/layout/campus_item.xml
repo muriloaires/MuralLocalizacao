@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -9,28 +10,22 @@
         android:orientation="vertical">
 
         <TextView
+            android:id="@+id/txtNomeCampus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Samambaia"
             android:textSize="20sp" />
 
         <TextView
-            android:id="@+id/tecontent"
+            android:id="@+id/txtCidadeCampus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Goiania"
             android:textColor="#ff9b9b9b" />
 
+
     </LinearLayout>
 
-    <ImageView
-        android:id="@+id/imcontent"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/carro"
-        android:layout_centerVertical="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
 
 
 </RelativeLayout>

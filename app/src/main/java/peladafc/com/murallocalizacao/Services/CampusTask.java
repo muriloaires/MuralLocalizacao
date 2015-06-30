@@ -67,7 +67,7 @@ public class CampusTask extends AsyncTask <Void, Void, String>{
                     campus.setNome(campusJson.getString("Nome"));
                     campus.setLatitude(campusJson.getDouble("Latitude"));
                     campus.setLongitude(campusJson.getDouble("longitude"));
-
+                    campus.setNomeCidade(cidade.getNome());
                     ArrayList<Instituto> institutos = new ArrayList<>();
                     JSONArray listaInstitutosJson = campusJson.getJSONArray("Institutos");
                     for (int k = 0; k < listaInstitutosJson.length(); k++) {
