@@ -38,10 +38,12 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         rv = (RecyclerView) findViewById(R.id.my_recycler_view);
         llm = new LinearLayoutManager(this);
         rv.setLayoutManager(llm);
         adapter = new CampusAdapter();
+
         if (Globals.cidades == null) {
             tsk = new CampusTask();
             tsk.execute();
@@ -153,7 +155,6 @@ public class MainActivity extends ActionBarActivity {
                 if (Globals.cidades.size() == 0) {
                     Toast.makeText(getApplicationContext(), "Houve algum problema de conexao", Toast.LENGTH_LONG);
                 } else {
-
                   adapter.setCampus(Globals.cidades);
                     rv.setAdapter(adapter);
                 }

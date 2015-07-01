@@ -24,16 +24,17 @@ import peladafc.com.murallocalizacao.Modelos.Instituto;
 
 import peladafc.com.murallocalizacao.globals.Globals;
 //
+
 /**
  * Created by AIRES on 29/06/2015.
  */
-public class CampusTask extends AsyncTask <Void, Void, String>{
+public class CampusTask extends AsyncTask<Void, Void, String> {
     private static final String urlStr = "https://cdn.fbsbx.com/hphotos-xpt1/v/t59.2708-21/11689315_10206301072113251_1447449821_n.json/institutis-1-1.json?oh=f40347e0eb42ab960de33a1930b54c3f&oe=5595BAE1&dl=1";
-    ReadyToGo ready;
 
-    public CampusTask(ReadyToGo ready){
-        this.ready = ready;
+    public CampusTask() {
+
     }
+
     @Override
     protected String doInBackground(Void... params) {
         String retorno = "";
@@ -45,7 +46,7 @@ public class CampusTask extends AsyncTask <Void, Void, String>{
             URLConnection urlConnection = url.openConnection();
             urlConnection.setReadTimeout(5000);
             BufferedReader in = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
-            while((retorno = in.readLine()) != null){
+            while ((retorno = in.readLine()) != null) {
                 json += retorno;
             }
 
@@ -66,9 +67,9 @@ public class CampusTask extends AsyncTask <Void, Void, String>{
         Globals.cidades = new ArrayList<Cidade>();
         try {
 
-            if(jsonString != null && jsonString.length() > 0){
+            if (jsonString != null && jsonString.length() > 0) {
                 JSONArray listasCidades = new JSONArray(jsonString);
-                for (int i = 0; i< listasCidades.length(); i++){
+                for (int i = 0; i < listasCidades.length(); i++) {
                     Cidade cidade = new Cidade();
 
                     JSONObject objetoCidade = listasCidades.getJSONObject(i);
@@ -103,8 +104,6 @@ public class CampusTask extends AsyncTask <Void, Void, String>{
                 }
             }
 
-
-            ready.readyTo();
         } catch (JSONException e) {
             Log.e("PARSE JSON", "Erro no parsing do Json", e);
         }

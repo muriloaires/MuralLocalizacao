@@ -61,7 +61,9 @@ public class CampusAdapter extends RecyclerView.Adapter <CampusAdapter.CampusVie
             @Override
             public void onClick(View v) {
                 Intent nextScreen = new Intent(v.getContext(), MapsActivity.class);
+                nextScreen.putExtra("LAT_LONG", new double[]{campus.get(holder.getAdapterPosition()).getLatitude(),campus.get(holder.getAdapterPosition()).getLongitude()});
                 v.getContext().startActivity(nextScreen);
+
                 Log.e("TO AQUI", campus.get(holder.getAdapterPosition()).getNome());
             }
         });
