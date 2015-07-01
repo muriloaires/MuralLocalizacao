@@ -2,6 +2,8 @@ package peladafc.com.murallocalizacao;
 
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -12,14 +14,19 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import peladafc.com.murallocalizacao.adapters.CampusAdapter;
+import peladafc.com.murallocalizacao.adapters.InstitutosAdapter;
 import peladafc.com.murallocalizacao.globals.Globals;
 
 public class MapsActivity extends FragmentActivity {
 
     private GoogleMap mMap;
-    private double latitudeCampus;
-    private double longitudeCampus;
     private double[] coordenadas;
+
+    RecyclerView rv;
+    LinearLayoutManager llm;
+    InstitutosAdapter adapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +37,11 @@ public class MapsActivity extends FragmentActivity {
         } else {
             coordenadas = extras.getDoubleArray("LAT_LONG");
         }
+        rv = (RecyclerView) findViewById(R.id.recycler_maps);
+        llm = new LinearLayoutManager(this);
+        adapter = new InstitutosAdapter();
+        rv.setLayoutManager(llm);
+        rv.setAdapter(adapter);
         setContentView(R.layout.activity_maps);
         setUpMapIfNeeded();
 

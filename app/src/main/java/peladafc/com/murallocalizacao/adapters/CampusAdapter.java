@@ -52,7 +52,7 @@ public class CampusAdapter extends RecyclerView.Adapter <CampusAdapter.CampusVie
     }
 
     @Override
-    public void onBindViewHolder(final CampusViewHolder holder, int position) {
+    public void onBindViewHolder(final CampusViewHolder holder,final int position) {
         String nomeCampus;
         nomeCampus = campus.get(position).getNome().equalsIgnoreCase("") ? "Campus: "+campus.get(position).getOrdem() : campus.get(position).getNome();
         holder.txtNomeCampus.setText(nomeCampus);
@@ -61,6 +61,7 @@ public class CampusAdapter extends RecyclerView.Adapter <CampusAdapter.CampusVie
             @Override
             public void onClick(View v) {
                 Intent nextScreen = new Intent(v.getContext(), MapsActivity.class);
+                Globals.campusSelecionado = campus.get(position);
                 nextScreen.putExtra("LAT_LONG", new double[]{campus.get(holder.getAdapterPosition()).getLatitude(),campus.get(holder.getAdapterPosition()).getLongitude()});
                 v.getContext().startActivity(nextScreen);
 

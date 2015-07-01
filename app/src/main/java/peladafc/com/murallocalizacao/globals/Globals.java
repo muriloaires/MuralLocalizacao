@@ -2,6 +2,7 @@ package peladafc.com.murallocalizacao.globals;
 
 import java.util.List;
 
+import peladafc.com.murallocalizacao.Modelos.Campus;
 import peladafc.com.murallocalizacao.Modelos.Cidade;
 
 /**
@@ -9,4 +10,5 @@ import peladafc.com.murallocalizacao.Modelos.Cidade;
  */
 public class Globals {
     public static List<Cidade> cidades;
+    public static Campus campusSelecionado;
 }
