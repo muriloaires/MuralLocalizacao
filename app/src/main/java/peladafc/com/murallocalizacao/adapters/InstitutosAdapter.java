@@ -1,6 +1,7 @@
 package peladafc.com.murallocalizacao.adapters;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -45,16 +46,19 @@ public class InstitutosAdapter extends RecyclerView.Adapter<InstitutosAdapter.In
     }
 
     @Override
-    public void onBindViewHolder(final InstitutoViewHolder holder, int position) {
+    public void onBindViewHolder(final InstitutoViewHolder holder, final int position) {
 
         holder.txtNomeInstituto.setText(institutos.get(position).getNome());
         holder.txtSiglaInstituto.setText(institutos.get(position).getSigla());
-        holder.location.setOnClickListener(new View.OnClickListener() {
+        holder.location.setOnLongClickListener((new View.OnLongClickListener() {
             @Override
-            public void onClick(View v) {
-                //TODO Implementar a localizacao do instituto
+            public boolean onLongClick(View v) {
+                String uri = "geo:0,0?q=" + Globals.campusSelecionado.getInstitutos().get(position).getLatitude() + "," + Globals.campusSelecionado.getInstitutos().get(position).getLongitude();
+                v.getContext().startActivity(new Intent(android.content.Intent.ACTION_VIEW, Uri.parse(uri)));
+                return true;
             }
-        });
+
+        }));
 
     }
 

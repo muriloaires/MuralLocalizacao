@@ -1,10 +1,16 @@
 package peladafc.com.murallocalizacao;
 
-import android.support.v4.app.FragmentActivity;
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
+import android.view.View;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -13,87 +19,111 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.maps.android.ui.IconGenerator;
 
-import peladafc.com.murallocalizacao.adapters.CampusAdapter;
+import java.util.List;
+
 import peladafc.com.murallocalizacao.adapters.InstitutosAdapter;
 import peladafc.com.murallocalizacao.globals.Globals;
 
-public class MapsActivity extends FragmentActivity {
+public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
-    private GoogleMap mMap;
     private double[] coordenadas;
 
     RecyclerView rv;
     LinearLayoutManager llm;
     InstitutosAdapter adapter;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
         Bundle extras = getIntent().getExtras();
+
         if (extras == null) {
             coordenadas = new double[]{0.0, 0.0};
         } else {
             coordenadas = extras.getDoubleArray("LAT_LONG");
         }
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
+
         rv = (RecyclerView) findViewById(R.id.recycler_maps);
         llm = new LinearLayoutManager(this);
         adapter = new InstitutosAdapter();
         rv.setLayoutManager(llm);
         rv.setAdapter(adapter);
 
-        setUpMapIfNeeded();
 
     }
+
+    private void setUpMap(GoogleMap mMap) {
+        mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+
+        LatLng mapCenter = new LatLng(coordenadas[0], coordenadas[1]);
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mapCenter, 16));
+        mMap.setBuildingsEnabled(false);
+        mMap.setMyLocationEnabled(true);
+
+        for (int i = 0; i < Globals.campusSelecionado.getInstitutos().size(); i++) {
+            IconGenerator iconFactory = new IconGenerator(this);
+            Bitmap iconBitmap = iconFactory.makeIcon(Globals.campusSelecionado.getInstitutos().get(i).getSigla());
+            LatLng institutoLocation = new LatLng(Globals.campusSelecionado.getInstitutos().get(i).getLatitude(), Globals.campusSelecionado.getInstitutos().get(i).getLongitude());
+            mMap.addMarker(new MarkerOptions().position(institutoLocation).flat(true).icon(BitmapDescriptorFactory.fromBitmap(iconBitmap)).title(Globals.campusSelecionado.getInstitutos().get(i).getNome()));
+        }
+
+    }
+
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        setUpMapIfNeeded();
+    public void onMapReady(final GoogleMap googleMap) {
+        setUpMap(googleMap);
+        rv.addOnItemTouchListener(
+                new RecyclerItemClickListener(this, new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int i) {
+                        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(Globals.campusSelecionado.getInstitutos().get(i).getLatitude(), Globals.campusSelecionado.getInstitutos().get(i).getLongitude()), 18));
+
+                    }
+                })
+        );
     }
 
 
-    private void setUpMapIfNeeded() {
+    public static class RecyclerItemClickListener implements RecyclerView.OnItemTouchListener {
+        private OnItemClickListener mListener;
 
-        if (mMap == null) {
+        public interface OnItemClickListener {
+            public void onItemClick(View view, int position);
+        }
 
-            mMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map))
-                    .getMap();
+        GestureDetector mGestureDetector;
 
-            if (mMap != null) {
-                setUpMap();
+        public RecyclerItemClickListener(Context context, OnItemClickListener listener) {
+            mListener = listener;
+            mGestureDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
+                @Override
+                public boolean onSingleTapUp(MotionEvent e) {
+                    return true;
+                }
+            });
+        }
+
+        @Override
+        public boolean onInterceptTouchEvent(RecyclerView view, MotionEvent e) {
+            View childView = view.findChildViewUnder(e.getX(), e.getY());
+            if (childView != null && mListener != null && mGestureDetector.onTouchEvent(e)) {
+                mListener.onItemClick(childView, view.getChildPosition(childView));
+                return true;
             }
+            return false;
+        }
+
+        @Override
+        public void onTouchEvent(RecyclerView view, MotionEvent motionEvent) {
         }
     }
-
-
-    private void setUpMap() {
-        LatLng mapCenter = new LatLng(coordenadas[0], coordenadas[1]);
-        mMap.clear();
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mapCenter, 16));
-        mMap.addMarker(new MarkerOptions()
-                .icon(BitmapDescriptorFactory.fromResource(R.drawable.person))
-                .position(mapCenter)
-                .flat(true)
-                );
-
-        CameraPosition cameraPosition = CameraPosition.builder()
-                .target(mapCenter)
-                .zoom(16)
-                .bearing(90)
-                .build();
-
-        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition),
-                2000, null);
-
-        for (int i = 0; i < Globals.campusSelecionado.getInstitutos().size(); i ++){
-            LatLng institutoLocation = new LatLng(Globals.campusSelecionado.getInstitutos().get(i).getLatitude(), Globals.campusSelecionado.getInstitutos().get(i).getLongitude() );
-            mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.drawable.locationmap)).position(institutoLocation).flat(true).title(Globals.campusSelecionado.getInstitutos().get(i).getNome()).rotation(275-180));
-        }
-    }
-
-
 }

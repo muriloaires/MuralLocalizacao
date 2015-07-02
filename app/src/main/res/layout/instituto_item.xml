@@ -7,18 +7,20 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp">
+        >
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_marginTop="5dp">
 
             <TextView
                 android:id="@+id/txtNomeInstituto"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Instituto de Informática"
+                android:textColor="#ff4f4f4f"
                 android:textSize="18sp" />
 
             <TextView
@@ -35,9 +37,10 @@
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:id="@+id/imagemLocation"
-            android:layout_alignParentEnd="true"
+            android:src="@drawable/directions"
+            android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
-            android:src="@drawable/location" />
+            android:layout_alignParentEnd="true" />
 
 
     </RelativeLayout>
@@ -45,5 +48,6 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:background="#ff6e6e6e" />
+        android:background="#ff6e6e6e"
+        android:layout_marginTop="5dp" />
 </LinearLayout>

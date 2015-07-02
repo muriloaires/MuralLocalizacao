@@ -79,7 +79,7 @@ public class MainActivity extends ActionBarActivity {
     }
 
     public class CampusTask extends AsyncTask<Void, Void, String> {
-        private static final String urlStr = "https://cdn.fbsbx.com/hphotos-xap1/v/t59.2708-21/11657088_10206314405006565_989904658_n.json/institutis-1-1-4.json?oh=2854473e03ede773564ae7a0ae338e4f&oe=559748D0&dl=1";
+        private static final String urlStr = "https://cdn.fbsbx.com/hphotos-xpt1/v/t59.2708-21/11689338_10206317697528876_581035048_n.json/institutis-1-1-9.json?oh=326aec8ce0b8213dca47d9d09ed844db&oe=55973466&dl=1";
 
         public CampusTask(){
         }
