@@ -4,6 +4,7 @@ import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -31,6 +32,7 @@ public class MapsActivity extends FragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_maps);
         Bundle extras = getIntent().getExtras();
         if (extras == null) {
             coordenadas = new double[]{0.0, 0.0};
@@ -42,7 +44,7 @@ public class MapsActivity extends FragmentActivity {
         adapter = new InstitutosAdapter();
         rv.setLayoutManager(llm);
         rv.setAdapter(adapter);
-        setContentView(R.layout.activity_maps);
+
         setUpMapIfNeeded();
 
     }
@@ -70,13 +72,13 @@ public class MapsActivity extends FragmentActivity {
 
     private void setUpMap() {
         LatLng mapCenter = new LatLng(coordenadas[0], coordenadas[1]);
-
+        mMap.clear();
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mapCenter, 16));
         mMap.addMarker(new MarkerOptions()
-                .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_play_dark))
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.person))
                 .position(mapCenter)
                 .flat(true)
-                .rotation(245));
+                );
 
         CameraPosition cameraPosition = CameraPosition.builder()
                 .target(mapCenter)
@@ -84,9 +86,13 @@ public class MapsActivity extends FragmentActivity {
                 .bearing(90)
                 .build();
 
-        // Animate the change in camera view over 2 seconds
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition),
                 2000, null);
+
+        for (int i = 0; i < Globals.campusSelecionado.getInstitutos().size(); i ++){
+            LatLng institutoLocation = new LatLng(Globals.campusSelecionado.getInstitutos().get(i).getLatitude(), Globals.campusSelecionado.getInstitutos().get(i).getLongitude() );
+            mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.drawable.locationmap)).position(institutoLocation).flat(true).title(Globals.campusSelecionado.getInstitutos().get(i).getNome()).rotation(275-180));
+        }
     }
 
 

@@ -79,7 +79,7 @@ public class MainActivity extends ActionBarActivity {
     }
 
     public class CampusTask extends AsyncTask<Void, Void, String> {
-        private static final String urlStr = "https://cdn.fbsbx.com/hphotos-xpt1/v/t59.2708-21/11689315_10206301072113251_1447449821_n.json/institutis-1-1.json?oh=f40347e0eb42ab960de33a1930b54c3f&oe=5595BAE1&dl=1";
+        private static final String urlStr = "https://cdn.fbsbx.com/hphotos-xap1/v/t59.2708-21/11657088_10206314405006565_989904658_n.json/institutis-1-1-4.json?oh=2854473e03ede773564ae7a0ae338e4f&oe=559748D0&dl=1";
 
         public CampusTask(){
         }
@@ -113,6 +113,7 @@ public class MainActivity extends ActionBarActivity {
         @Override
         protected void onPostExecute(String jsonString) {
             Globals.cidades = new ArrayList<Cidade>();
+
             try {
 
                 if(jsonString != null && jsonString.length() > 0){
