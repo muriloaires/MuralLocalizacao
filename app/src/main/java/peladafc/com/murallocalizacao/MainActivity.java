@@ -56,7 +56,7 @@ public class MainActivity extends ActionBarActivity {
         carregarLista();
 
         /**
-         * Casso o usuário deseje recarregar a lista
+         * Casso o usuï¿½rio deseje recarregar a lista
          */
         txtFalha.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,14 +86,14 @@ public class MainActivity extends ActionBarActivity {
     }
 
     /**
-     * Método responsável por garantir que a lista de cidades seja carregada apenas uma vez.
+     * Mï¿½todo responsï¿½vel por garantir que a lista de cidades seja carregada apenas uma vez.
      */
     private void carregarLista(){
         if (Globals.cidades == null || Globals.cidades.size() == 0) {
             tsk = new CampusTask();
             pb.setVisibility(View.VISIBLE);
+            txtFalha.setVisibility(View.INVISIBLE);
             rv.setVisibility(View.INVISIBLE);
-            pb.setVisibility(View.INVISIBLE);
             tsk.execute();
         }else{
             adapter.setCampus(Globals.cidades);
@@ -119,7 +119,7 @@ public class MainActivity extends ActionBarActivity {
     }
 
     /**
-     * Classe responsável por executar a busca do arquivo JSON na internet
+     * Classe responsï¿½vel por executar a busca do arquivo JSON na internet
      */
     public class CampusTask extends AsyncTask<Void, Void, String> {
 
@@ -160,7 +160,7 @@ public class MainActivity extends ActionBarActivity {
         }
 
         /**
-         * método responsável por transformar a string json em uma lista de cidades, que será alocada na variável estática da clase Globals
+         * mï¿½todo responsï¿½vel por transformar a string json em uma lista de cidades, que serï¿½ alocada na variï¿½vel estï¿½tica da clase Globals
          * @param jsonString
          */
         public void parseJson(String jsonString){
@@ -212,9 +212,10 @@ public class MainActivity extends ActionBarActivity {
                     }
                 }
 
-                if (Globals.cidades.size() == 0) {
+                if (Globals.cidades == null || Globals.cidades.size() == 0) {
                     Toast.makeText(getApplicationContext(), "Houve algum problema de conexao", Toast.LENGTH_LONG);
                     txtFalha.setVisibility(View.VISIBLE);
+                    pb.setVisibility(View.INVISIBLE);
                 } else {
                     adapter.setCampus(Globals.cidades);
                     rv.setAdapter(adapter);

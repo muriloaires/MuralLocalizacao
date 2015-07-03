@@ -11,21 +11,17 @@ import android.support.v7.widget.RecyclerView;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.ImageView;
+import android.widget.ImageButton;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.maps.android.ui.IconGenerator;
-import com.melnykov.fab.FloatingActionButton;
-
-import java.util.List;
 
 import peladafc.com.murallocalizacao.adapters.InstitutosAdapter;
 import peladafc.com.murallocalizacao.globals.Globals;
@@ -37,7 +33,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     RecyclerView rv;
     LinearLayoutManager llm;
     InstitutosAdapter adapter;
-    FloatingActionButton fab;
+    ImageButton fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +50,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab = (ImageButton) findViewById(R.id.fab);
         rv = (RecyclerView) findViewById(R.id.recycler_maps);
         llm = new LinearLayoutManager(this);
         adapter = new InstitutosAdapter();
@@ -71,6 +67,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mapCenter, 16));
         mMap.setBuildingsEnabled(false);
         mMap.setMyLocationEnabled(true);
+
+
+        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                return false;
+            }
+        });
 
         for (int i = 0; i < Globals.campusSelecionado.getInstitutos().size(); i++) {
             IconGenerator iconFactory = new IconGenerator(this);
@@ -99,9 +103,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             public void onClick(View v) {
                 int tipoMapa = googleMap.getMapType();
 
-                if(tipoMapa == GoogleMap.MAP_TYPE_HYBRID){
+                if (tipoMapa == GoogleMap.MAP_TYPE_HYBRID) {
                     tipoMapa = 0;
-                }else{
+                } else {
                     tipoMapa++;
                 }
                 googleMap.setMapType(tipoMapa);

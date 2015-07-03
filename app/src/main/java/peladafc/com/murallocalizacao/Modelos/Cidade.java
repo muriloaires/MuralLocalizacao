@@ -6,6 +6,7 @@ import java.util.List;
  * Created by AIRES on 29/06/2015.
  */
 public class Cidade {
+
     private String nome;
     private List<Campus> campusList;
 
