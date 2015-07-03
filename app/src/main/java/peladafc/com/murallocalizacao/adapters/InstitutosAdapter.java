@@ -50,7 +50,8 @@ public class InstitutosAdapter extends RecyclerView.Adapter<InstitutosAdapter.In
 
         holder.txtNomeInstituto.setText(institutos.get(position).getNome());
         holder.txtSiglaInstituto.setText(institutos.get(position).getSigla());
-        holder.location.setOnLongClickListener((new View.OnLongClickListener() {
+
+        holder.ll.setOnLongClickListener((new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
                 String uri = "geo:0,0?q=" + Globals.campusSelecionado.getInstitutos().get(position).getLatitude() + "," + Globals.campusSelecionado.getInstitutos().get(position).getLongitude();
@@ -70,13 +71,13 @@ public class InstitutosAdapter extends RecyclerView.Adapter<InstitutosAdapter.In
     public static class InstitutoViewHolder extends RecyclerView.ViewHolder {
         TextView txtNomeInstituto;
         TextView txtSiglaInstituto;
-        ImageView location;
+        LinearLayout ll;
 
         public InstitutoViewHolder(View itemView) {
             super(itemView);
             txtNomeInstituto = (TextView) itemView.findViewById(R.id.txtNomeInstituto);
             txtSiglaInstituto = (TextView) itemView.findViewById(R.id.txtSiglaInstituto);
-            location = (ImageView) itemView.findViewById(R.id.imagemLocation);
+            ll =  (LinearLayout) itemView.findViewById(R.id.layoutItemCampus);
         }
 
 

@@ -1,13 +1,21 @@
 package peladafc.com.murallocalizacao;
 
+import android.content.Context;
+import android.content.DialogInterface;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -34,52 +42,87 @@ public class MainActivity extends ActionBarActivity {
     RecyclerView rv;
     LinearLayoutManager llm;
     CampusAdapter adapter;
+    ProgressBar pb;
+    TextView txtFalha;
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        getSupportActionBar().setTitle("Lista de campus");
+        //inicar as views
+        iniciarViews();
+        //listar os campus
+        carregarLista();
+
+        /**
+         * Casso o usuário deseje recarregar a lista
+         */
+        txtFalha.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                carregarLista();
+            }
+        });
+
+
+    }
+
+    /**
+     * Criar a configura os elementos das views desta activity
+     */
+    private void iniciarViews(){
+        pb = (ProgressBar) findViewById(R.id.progressBar);
+        pb.setVisibility(View.INVISIBLE);
+
+        txtFalha = (TextView) findViewById(R.id.textViewFalha);
+        txtFalha.setVisibility(View.INVISIBLE);
+
         rv = (RecyclerView) findViewById(R.id.my_recycler_view);
         llm = new LinearLayoutManager(this);
+
         rv.setLayoutManager(llm);
         adapter = new CampusAdapter();
+    }
 
-        if (Globals.cidades == null) {
+    /**
+     * Método responsável por garantir que a lista de cidades seja carregada apenas uma vez.
+     */
+    private void carregarLista(){
+        if (Globals.cidades == null || Globals.cidades.size() == 0) {
             tsk = new CampusTask();
+            pb.setVisibility(View.VISIBLE);
+            rv.setVisibility(View.INVISIBLE);
+            pb.setVisibility(View.INVISIBLE);
             tsk.execute();
         }else{
             adapter.setCampus(Globals.cidades);
             rv.setAdapter(adapter);
         }
-
-
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
+
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            carregarLista();
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Classe responsável por executar a busca do arquivo JSON na internet
+     */
     public class CampusTask extends AsyncTask<Void, Void, String> {
-        private static final String urlStr = "https://cdn.fbsbx.com/hphotos-xpt1/v/t59.2708-21/11689338_10206317697528876_581035048_n.json/institutis-1-1-9.json?oh=326aec8ce0b8213dca47d9d09ed844db&oe=55973466&dl=1";
+
 
         public CampusTask(){
         }
@@ -89,10 +132,10 @@ public class MainActivity extends ActionBarActivity {
             String json = "";
             try {
 
-                URL url = new URL(urlStr);
-
+                URL url = new URL(Globals.urlStr);
                 URLConnection urlConnection = url.openConnection();
                 urlConnection.setReadTimeout(5000);
+
                 BufferedReader in = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
                 while((retorno = in.readLine()) != null){
                     json += retorno;
@@ -110,14 +153,24 @@ public class MainActivity extends ActionBarActivity {
             return json;
         }
 
+
         @Override
         protected void onPostExecute(String jsonString) {
-            Globals.cidades = new ArrayList<Cidade>();
+            parseJson(jsonString);
+        }
 
+        /**
+         * método responsável por transformar a string json em uma lista de cidades, que será alocada na variável estática da clase Globals
+         * @param jsonString
+         */
+        public void parseJson(String jsonString){
             try {
 
                 if(jsonString != null && jsonString.length() > 0){
+                    Globals.cidades = new ArrayList<Cidade>();
                     JSONArray listasCidades = new JSONArray(jsonString);
+
+                    //Iterando entre as cidades
                     for (int i = 0; i< listasCidades.length(); i++){
                         Cidade cidade = new Cidade();
 
@@ -125,6 +178,8 @@ public class MainActivity extends ActionBarActivity {
                         cidade.setNome(objetoCidade.getString("Nome"));
                         JSONArray listaCampusJson = objetoCidade.getJSONArray("Campus");
                         ArrayList<Campus> listaCampus = new ArrayList<>();
+
+                        //Iterando entre os campus da cidade indexada em [i]
                         for (int j = 0; j < listaCampusJson.length(); j++) {
                             Campus campus = new Campus();
                             JSONObject campusJson = listaCampusJson.getJSONObject(j);
@@ -136,6 +191,8 @@ public class MainActivity extends ActionBarActivity {
                             campus.setNomeCidade(cidade.getNome());
                             ArrayList<Instituto> institutos = new ArrayList<>();
                             JSONArray listaInstitutosJson = campusJson.getJSONArray("Institutos");
+
+                            //Iterando entre os institutos do campus indexado em [j]
                             for (int k = 0; k < listaInstitutosJson.length(); k++) {
                                 Instituto instituto = new Instituto();
                                 JSONObject institutoJson = listaInstitutosJson.getJSONObject(k);
@@ -149,21 +206,26 @@ public class MainActivity extends ActionBarActivity {
                             listaCampus.add(campus);
                         }
                         cidade.setCampusList(listaCampus);
+
+                        //adicionando a cidade na lista global
                         Globals.cidades.add(cidade);
                     }
                 }
 
                 if (Globals.cidades.size() == 0) {
                     Toast.makeText(getApplicationContext(), "Houve algum problema de conexao", Toast.LENGTH_LONG);
+                    txtFalha.setVisibility(View.VISIBLE);
                 } else {
-                  adapter.setCampus(Globals.cidades);
+                    adapter.setCampus(Globals.cidades);
                     rv.setAdapter(adapter);
+                    pb.setVisibility(View.INVISIBLE);
+                    rv.setVisibility(View.VISIBLE);
+                    txtFalha.setVisibility(View.INVISIBLE);
                 }
             } catch (JSONException e) {
                 Log.e("PARSE JSON", "Erro no parsing do Json", e);
             }
-
-
         }
+
     }
 }

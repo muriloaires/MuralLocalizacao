@@ -19,12 +19,21 @@
             android:text="Samambaia"
             android:textSize="20sp" />
 
+        <TextView android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/setor"
+            android:text="Setor Universitario"
+            android:textColor="#ff9b9b9b"
+            />
+
         <TextView
             android:id="@+id/txtCidadeCampus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Goiania"
             android:textColor="#ff9b9b9b" />
+
+
 
         <View
             android:layout_width="match_parent"

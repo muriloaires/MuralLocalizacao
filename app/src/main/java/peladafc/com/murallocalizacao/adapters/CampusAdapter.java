@@ -23,17 +23,10 @@ import peladafc.com.murallocalizacao.globals.Globals;
 
 /**
  * Created by AIRES on 29/06/2015.
+ * Classe responsável por insrir os objetos na recyclerview
  */
 public class CampusAdapter extends RecyclerView.Adapter <CampusAdapter.CampusViewHolder>{
     private List<Campus> campus;
-
-    public CampusAdapter(){
-
-    }
-
-    public List<Campus> getCampus() {
-        return campus;
-    }
 
     public void setCampus(List<Cidade> cidade) {
         campus = new ArrayList<>();
@@ -54,18 +47,18 @@ public class CampusAdapter extends RecyclerView.Adapter <CampusAdapter.CampusVie
     @Override
     public void onBindViewHolder(final CampusViewHolder holder,final int position) {
         String nomeCampus;
-        nomeCampus = campus.get(position).getNome().equalsIgnoreCase("") ? "Campus: "+campus.get(position).getOrdem() : campus.get(position).getNome();
+        nomeCampus = campus.get(position).getNome().equalsIgnoreCase("") ? "Campus "+campus.get(position).getOrdem() : "Campus "+campus.get(position).getNome();
         holder.txtNomeCampus.setText(nomeCampus);
         holder.txtNomeCidade.setText(campus.get(position).getNomeCidade());
+        holder.bairroCampus.setText("Setor " + campus.get(position).getSetor());
+
+        //a partir deste click no layout, a aplicação passará para a próxima activity, com o mapa do campus selecionado
         holder.ll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent nextScreen = new Intent(v.getContext(), MapsActivity.class);
                 Globals.campusSelecionado = campus.get(position);
-                nextScreen.putExtra("LAT_LONG", new double[]{campus.get(holder.getAdapterPosition()).getLatitude(),campus.get(holder.getAdapterPosition()).getLongitude()});
                 v.getContext().startActivity(nextScreen);
-
-                Log.e("TO AQUI", campus.get(holder.getAdapterPosition()).getNome());
             }
         });
 
@@ -79,9 +72,11 @@ public class CampusAdapter extends RecyclerView.Adapter <CampusAdapter.CampusVie
     public static class CampusViewHolder extends RecyclerView.ViewHolder {
         TextView txtNomeCampus;
         TextView txtNomeCidade;
+        TextView bairroCampus;
         LinearLayout ll;
         public CampusViewHolder(View itemView) {
             super(itemView);
+            bairroCampus = (TextView) itemView.findViewById(R.id.setor);
             ll = (LinearLayout) itemView.findViewById(R.id.layoutItemCampus);
             txtNomeCampus = (TextView) itemView.findViewById(R.id.txtNomeCampus);
             txtNomeCidade = (TextView) itemView.findViewById(R.id.txtCidadeCampus);

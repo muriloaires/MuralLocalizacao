@@ -1,28 +1,54 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    >
-    <fragment
+    android:layout_height="match_parent">
+
+
+    <com.melnykov.fab.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_gravity="right"
+        android:src="@drawable/mapa"
+        fab:fab_colorNormal="#ff508cff"
+        fab:fab_colorRipple="#ff151e3f"
+        android:layout_marginTop="210dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"/>
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="240dp" android:id="@+id/map"
-        tools:context="peladafc.com.murallocalizacao.MapsActivity"
-        android:name="com.google.android.gms.maps.SupportMapFragment"
-        tools:layout="@layout/mapa_campus_selecionado"
-        />
+        android:layout_height="match_parent"
+        android:clickable="false"
+        android:orientation="vertical">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_maps"
-        android:scrollbars="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="280dp"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        android:clickable="true"
-        android:focusable="true"/>
+        <fragment
+            android:id="@+id/map"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="240dp"
+            tools:context="peladafc.com.murallocalizacao.MapsActivity"
+            tools:layout="@layout/mapa_campus_selecionado" />
 
 
 
-</LinearLayout>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_maps"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#FFFF"
+            android:clickable="true"
+            android:focusable="true"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:scrollbars="vertical"
+
+            />
+
+
+    </LinearLayout>
+</RelativeLayout>
+
 

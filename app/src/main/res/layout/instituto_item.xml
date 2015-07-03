@@ -2,45 +2,44 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:clickable="false"
     android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        >
+        android:clickable="false">
 
         <LinearLayout
+            android:id="@+id/layoutItemCampus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginTop="5dp">
+            android:layout_marginTop="5dp"
+            android:clickable="false"
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/txtNomeInstituto"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="250dp"
+                android:layout_height="22dp"
+                android:clickable="false"
                 android:text="Instituto de Informática"
                 android:textColor="#ff4f4f4f"
                 android:textSize="18sp" />
+
 
             <TextView
                 android:id="@+id/txtSiglaInstituto"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:clickable="false"
                 android:text="INF" />
 
 
         </LinearLayout>
 
 
-        <ImageView
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:id="@+id/imagemLocation"
-            android:src="@drawable/directions"
-            android:layout_centerVertical="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true" />
+
 
 
     </RelativeLayout>
@@ -48,6 +47,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"
+        android:layout_marginTop="5dp"
         android:background="#ff6e6e6e"
-        android:layout_marginTop="5dp" />
+        android:clickable="false" />
 </LinearLayout>

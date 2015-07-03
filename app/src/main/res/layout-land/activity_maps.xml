@@ -20,7 +20,8 @@
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
         android:clickable="true"
-        android:focusable="true"/>
+        android:focusable="true"
+        android:background="#FFFF"/>
 
 
 
